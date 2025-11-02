@@ -123,18 +123,21 @@ def create_changable_widgets1(pallet, pwidth, pheight, schedule_dic, year, month
                     draw.text((left+l_r*4//5+l_r*j,sup+s_i*i+s_i*0.03//1),text=str(month_list[i][j]),font=ImageFont.truetype('HGRSGU.TTC',int(28*scale_per_pallet)),fill='Black')
     return pallet
 
+def kill_files(save_dir):
+    for file in save_dir.iterdir():
+        if file.is_file():
+            file.unlink()
+
 def make_calender(bg_path, schedule_dic, save_dir, pwidth, pheight):
     calendar.setfirstweekday(6)
     pallet = return_pallet(bg_path, pwidth, pheight)
     pallet = return_precalender(pallet, pwidth, pheight)
-    year=datetime.date.today().year
-    month=datetime.date.today().month
+    year = datetime.date.today().year
+    month = datetime.date.today().month
     pallet = create_changable_widgets1(pallet, pwidth, pheight, schedule_dic, year, month)
     YYYYMMDD =str(year)+'{:0=2}'.format(int(month))+'{:0=2}'.format(datetime.date.today().day)
     save_path = save_dir / f"{YYYYMMDD}_{bg_path.parts[-1]}"
-    for file in save_dir.iterdir():
-        if file.is_file():
-            file.unlink()
+    kill_files(save_dir)
     pallet.save((save_path), quality=95)
     return save_path
 
